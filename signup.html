@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>form</title>
+    <style>
+      .error {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <p class="error"></p>
+
+    <form class="signup">
+      <fieldset>
+        <legend>Signup Form</legend>
+        <label for="name">Name :</label><br />
+        <input
+          type="text"
+          name="name"
+          id="name"
+          placeholder="Enter your name"
+        /><br /><br />
+
+        <label for="email">Email :</label><br />
+        <input
+          type="email"
+          name="email"
+          id="email"
+          placeholder="Enter your email"
+        /><br /><br />
+
+        <label for="password">Password :</label><br />
+        <input
+          type="password"
+          name="password"
+          id="password"
+          placeholder="Enter your password"
+        /><br /><br />
+
+        <label for="confirm-password">Confirm Password` :</label><br />
+        <input
+          type="password"
+          name="confirm-password"
+          id="confirm-password"
+          placeholder="Enter confirm-password"
+        /><br /><br />
+
+        <input type="submit" />
+      </fieldset>
+    </form>
+    <script>
+      let form = document.querySelector(".signup");
+      let input_name = document.querySelector("#name");
+      let input_email = document.querySelector("#email");
+      let input_password = document.querySelector("#password");
+      let input_confirm_password = document.querySelector("#confirm-password");
+      let error = document.querySelector(".error");
+
+      let arr = []; //for saving the data
+      let id = 1;
+      form.addEventListener("submit", validateForm);
+
+      function validateForm(e) {
+        e.preventDefault(); //when we click the form it should not submit the form
+
+        let name = input_name.value;
+        let email = input_email.value;
+        let password = input_password.value;
+        let confirm_password = input_confirm_password.value;
+
+
+        if (checkNumberOfWords(name) < 2) {
+          error.innerHTML = "Enter your first name and last name ";
+        } else if (email.includes("@") == false) {
+          error.innerHTML = "Please enter valid email";
+        } else if (checkPassword(password, name, email) == false) {
+          error.innerHTML =
+            "password should contain capitalLetter smallLetter specialChracter & number ; ";
+        } else if (password != confirm_password) {
+          error.innerHTML = "password doent match";
+        } else if (checkEmail(email) == false) {
+          error.innerHTML = "email already exists"; //checking email already exists or not
+        } else {
+          error.innerHTML = "form submitted";
+          let obj = { id: id++, name, email, password }; //for saving data i created obj and will stored in arr
+          arr.push(obj);
+          // console.log(arr);
+          
+          localStorage.setItem("data",JSON.stringify(arr))//saves data in local storage 
+          // here data is key and JSON.stringify(arr)is value in which (arr) we converted into json
+
+          window.location.href="/login.html";   //will link signup page with login page 
+        }
+       
+      }
+      // Xfx%4321
+      // ......................................................................
+
+      function checkNumberOfWords(name) {
+        name = name.trim(); //this will make sure the space is not at begining and at the end
+
+        let arr = name.split(" ");
+        return arr.length;
+      }
+
+      function checkPassword(password, name, email) {
+        let capitalLetter = 0,
+          smallLetter = 0,
+          specialChracter = 0,
+          number = 0;
+        for (let t of password) {
+          if (t >= "A" && t <= "Z") {
+            capitalLetter++;
+          } else if (t >= "a" && t <= "z") {
+            smallLetter++;
+          } else if (t >= "0" && t <= "9") {
+            number++;
+          } else specialChracter++;
+        }
+        if (
+          (capitalLetter >= 1,
+          smallLetter >= 1,
+          specialChracter >= 1,
+          number >= 1 && password != name && password != email)
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      function checkEmail(email) {
+        //for checking if email is already registered or not
+        for (t of arr) {
+          if (t.email == email) {
+            return false;
+          } else {
+            return true;
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

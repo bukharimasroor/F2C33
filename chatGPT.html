@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<p class="answer"></p>
+<body>
+    <textarea name="" id="" cols="30" rows="10" placeholder='type "What is a dog?"'></textarea><br> <!-- textbox -->
+    <button class="button">Submit</button>
+    <img class="image" style="display:none">
+    
+    <script>
+         let data = [{
+      question: "What is a dog?",
+      answer: "A dog is a domesticated mammal and a common household pet.",
+      imageLink: "dog.jpg"
+    }];
+
+    function generateAnswer() {
+      // Get the user input from the textarea
+      let userInput = document.querySelector("textarea").value;
+
+      // Find the matching question in the data
+      let matchingQuestion = data.find(item => item.question.toLowerCase() === userInput.toLowerCase());
+
+      // If a matching question is found, display the answer
+      if (matchingQuestion) {
+        document.querySelector(".answer").textContent = matchingQuestion.answer;
+        document.querySelector(".image").src = matchingQuestion.imageLink;
+        document.querySelector(".image").style.display = "block";
+      } else {
+        document.querySelector(".answer").textContent = "Sorry, I don't know the answer to that question.";
+    
+    }
+    }
+
+    document.querySelector(".button").addEventListener("click", generateAnswer);
+
+    </script>
+
+</body>
+</html> 

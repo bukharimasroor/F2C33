@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>login form</title>
+    <style>
+      p{
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <p class="error"></p>
+    <form class="login">
+      <fieldset>
+        <legend>Login Form</legend>
+
+        <label for="email">Email :</label><br />
+        <input
+          type="email"
+          name="email"
+          id="email"
+          placeholder="Enter your email"
+        /><br /><br />
+
+        <label for="password">Password :</label><br />
+        <input
+          type="password"
+          name="password"
+          id="password"
+          placeholder="Enter your password"
+        /><br /><br />
+
+        <input type="submit" />
+      </fieldset>
+    </form>
+    <script>
+      let  login_form=document.querySelector(".login");
+      let error =document.querySelector('.error');
+
+      login_form=addEventListener('submit',loginForm)
+      let data //making it global so that we can acess it anywhere
+      let login_email =document.querySelector('#email')
+      let login_password=document.querySelector('#password')
+      
+
+      function loginForm(e){
+        e.preventDefault();   //prevents from auto submission
+       data =JSON.parse(localStorage.getItem('data')) //collect data from signup form
+       let email = login_email.value;
+       let password =login_password.value;
+       let cases =['email not found','password incorrect','login sucessful']
+        let x =  checkLogin (email,password)
+        if(x==0||x==1){
+          error.innerHTML =cases[x]
+        }
+        else{
+          error.innerHTML=cases[x]
+          window.location.href="/chatGPT.html";
+        } 
+      }
+
+      function checkLogin(email,password){
+        let flag=0; //if email is there it will return true and with whole loop else it will go directly to 0
+        for(let t of data)
+        // from here 3 possiblity user can do; 1-email wrong ,2-passwrd wrng , 3 both worg or empty
+        {
+          if(t.email == email ){
+            if(t.password == password){
+              return "2"; 
+            }
+            else{
+              return "1"
+            }
+            flag=1;
+          } 
+        }
+        if (flag==0){
+          return "0";
+        }
+      }
+      //for generating token 
+      function tokenGeneration(){
+        let capitalLetter="ASDFGHJKLQWERTYUIOPZXCVBNM"
+        let smallLetter ="qwertyuiopasdfghjklzxcvbnm"
+        let number = 1234567890
+        let specialChracter="!@#$%^&*()"
+        let character = capitalLetter+smallLetter+number+specialChracter;
+        
+        let token =""
+        for(let i=0;i<10;i++){
+          let random =Math.floor(Math.random()*character.length)
+          token=token+charcater[random]
+        }
+        return token
+      }
+      //ANOTHER WAY OF GENERATING TOKEN 
+      // function generatetoke1(){
+      //   let token1=crypto.randomUUID
+      // }
+    </script>
+  </body>
+</html>
